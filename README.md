@@ -1,4 +1,3 @@
-
 # Driver Drowsiness Detection System
 
 A real-time driver fatigue monitoring system built with **transfer learning (MobileNetV2)**, trained on 15,000+ labeled driver behavior images across three states — **alert, sleepy, yawning** — and integrated with an **IoT-based alert mechanism** for real-time warnings. This demonstrates a full AI-to-hardware pipeline: camera → model inference → hardware alert.
