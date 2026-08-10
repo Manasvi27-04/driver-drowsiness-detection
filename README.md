@@ -1,3 +1,4 @@
+
 # Driver Drowsiness Detection System
 
 A real-time driver fatigue monitoring system built with **transfer learning (MobileNetV2)**, trained on 15,000+ labeled driver behavior images across three states — **alert, sleepy, yawning** — and integrated with an **IoT-based alert mechanism** for real-time warnings. This demonstrates a full AI-to-hardware pipeline: camera → model inference → hardware alert.
@@ -26,21 +27,17 @@ Camera Feed → Face/Frame Preprocessing → MobileNetV2 (Transfer Learning) →
 driver-drowsiness-detection/
 ├── README.md
 ├── requirements.txt
-├── .gitignore
-├── src/
-│   ├── data_preprocessing.py   # Load, clean, split dataset
-│   ├── data_augmentation.py    # Augmentation pipeline
-│   ├── model.py                # MobileNetV2 transfer learning model
-│   ├── train.py                # Training loop + checkpointing
-│   ├── evaluate.py             # Evaluation metrics + confusion matrix
-│   ├── inference.py            # Real-time webcam inference
-│   └── iot_alert.py            # Serial communication with Arduino
-├── arduino/
-│   └── drowsiness_alert.ino    # Arduino sketch for buzzer/LED alert
-├── models/                     # Saved model weights (.h5) - gitignored
-├── data/                       # Dataset (alert/ sleepy/ yawning/) - gitignored
-└── notebooks/
-    └── exploration.ipynb       # EDA and experimentation notebook
+├── data_preprocessing.py   # Load, clean, split dataset
+├── data_augmentation.py    # Augmentation pipeline
+├── model.py                # MobileNetV2 transfer learning model
+├── train.py                # Training loop + checkpointing
+├── evaluate.py              # Evaluation metrics + confusion matrix
+├── inference.py             # Real-time webcam inference
+├── iot_alert.py             # Serial communication with Arduino
+├── drowsiness_alert.ino    # Arduino sketch for buzzer/LED alert
+├── exploration.md          # Notes for EDA/experimentation (convert to .ipynb locally)
+├── models/                  # Saved model weights (.h5) - not tracked in git
+└── data/                    # Dataset (alert/ sleepy/ yawning/) - not tracked in git
 ```
 
 ## Dataset
@@ -66,7 +63,7 @@ Any labeled driver-behavior dataset works (e.g., the [Driver Drowsiness Dataset 
 ## Setup
 
 ```bash
-git clone https://github.com/<your-username>/driver-drowsiness-detection.git
+git clone https://github.com/Manasvi27-04/driver-drowsiness-detection.git
 cd driver-drowsiness-detection
 pip install -r requirements.txt
 ```
@@ -75,22 +72,22 @@ pip install -r requirements.txt
 
 **1. Preprocess and split data**
 ```bash
-python src/data_preprocessing.py --data_dir data/raw --output_dir data
+python data_preprocessing.py --data_dir data/raw --output_dir data
 ```
 
 **2. Train the model**
 ```bash
-python src/train.py --data_dir data --epochs 20 --batch_size 32
+python train.py --data_dir data --epochs 20 --batch_size 32
 ```
 
 **3. Evaluate**
 ```bash
-python src/evaluate.py --model_path models/drowsiness_mobilenetv2.h5 --test_dir data/test
+python evaluate.py --model_path models/drowsiness_mobilenetv2.h5 --test_dir data/test
 ```
 
 **4. Run real-time inference with IoT alert**
 ```bash
-python src/inference.py --model_path models/drowsiness_mobilenetv2.h5 --serial_port COM3
+python inference.py --model_path models/drowsiness_mobilenetv2.h5 --serial_port COM3
 ```
 
 ## Model Details
@@ -107,7 +104,7 @@ python src/inference.py --model_path models/drowsiness_mobilenetv2.h5 --serial_p
 
 ## IoT Alert Integration
 
-`src/iot_alert.py` opens a serial connection to an Arduino running `arduino/drowsiness_alert.ino`. When the model predicts **sleepy** or **yawning** with high confidence for a sustained number of consecutive frames, it sends a signal (`'1'`) over serial, which triggers a buzzer and LED on the Arduino. This closes the loop from AI inference to physical hardware response.
+`iot_alert.py` opens a serial connection to an Arduino running `drowsiness_alert.ino`. When the model predicts **sleepy** or **yawning** with high confidence for a sustained number of consecutive frames, it sends a signal (`'1'`) over serial, which triggers a buzzer and LED on the Arduino. This closes the loop from AI inference to physical hardware response.
 
 ## Results
 
